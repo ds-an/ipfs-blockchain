@@ -1,0 +1,25 @@
+services:
+  ipfs-host-main:
+    build: ./ipfs
+    hostname: ipfs-host-main
+    secrets:
+      - swarm-key
+    environment:
+      IPFS_SWARM_KEY_FILE: /run/secrets/swarm-key
+  ipfs-host-2:
+    build: ./ipfs
+    hostname: ipfs-host-2
+    secrets:
+      - swarm-key
+    environment:
+      IPFS_SWARM_KEY_FILE: /run/secrets/swarm-key
+  ipfs-host-3:
+    build: ./ipfs
+    hostname: ipfs-host-3
+    secrets:
+      - swarm-key
+    environment:
+      IPFS_SWARM_KEY_FILE: /run/secrets/swarm-key
+secrets:
+  swarm-key:
+    file: ./ipfs/swarm.key
