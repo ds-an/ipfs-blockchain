@@ -1,6 +1,6 @@
 FROM node:18
-WORKDIR /app
-COPY . ./
+# WORKDIR /app
+# COPY . .
 EXPOSE 3000
-RUN npm init
-CMD ["node", "index.js"]
+ENTRYPOINT [ "sleep", "1000" ]
+# ENTRYPOINT [ "npm", "install" ]

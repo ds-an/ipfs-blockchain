@@ -6,6 +6,8 @@ services:
       - swarm-key
     environment:
       IPFS_SWARM_KEY_FILE: /run/secrets/swarm-key
+    # ports:
+    #   - 5001:5001
   ipfs-host-2:
     build: ./ipfs
     hostname: ipfs-host-2
@@ -20,6 +22,12 @@ services:
       - swarm-key
     environment:
       IPFS_SWARM_KEY_FILE: /run/secrets/swarm-key
+  app:
+    build: ./js-etherium
+    hostname: app
+  # alpine:
+  #   image: alpine:3.21.2
+  #   hostname: curl-host
 secrets:
   swarm-key:
     file: ./ipfs/swarm.key
