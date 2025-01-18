@@ -5,4 +5,4 @@ EXPOSE 3000
 # CMD [ "npx", "hardhat", "node" ]
 RUN [ "npm", "init", "-y"]
 RUN [ "npm", "install", "--save-dev", "hardhat" ]
-RUN [ "npx", "hardhat"]
+CMD [ "npx", "hardhat", "test", "--verbose"]
