@@ -1,4 +1,7 @@
-//Load express module with `require` directive
+// TODO: Add https://github.com/ipfs/js-kubo-rpc-client or
+// https://github.com/ipfs/helia instead of web3.storage
+
+// Load express module with `require` directive
 const express = require('express');
 const fileUpload = require('express-fileupload');
 const { Web3Storage, getFilesFromPath  } = require('web3.storage');

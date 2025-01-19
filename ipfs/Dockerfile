@@ -1,0 +1,6 @@
+FROM ipfs/kubo:master-2025-01-10-3b098b9
+ENV IPFS_SWARM_KEY_FILE=/run/secrets/swarm-key
+EXPOSE 4001
+EXPOSE 4001/udp
+EXPOSE 8080
+EXPOSE 5001

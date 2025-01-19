@@ -1,6 +1,8 @@
 FROM node:18
 WORKDIR /app
-COPY . ./
+COPY . .
 EXPOSE 3000
-RUN npm init
-CMD ["node", "index.js"]
+# CMD [ "npx", "hardhat", "node" ]
+RUN [ "npm", "init", "-y"]
+RUN [ "npm", "install", "--save-dev", "hardhat" ]
+CMD [ "npx", "hardhat", "test", "--verbose"]
