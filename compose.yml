@@ -1,3 +1,5 @@
+# TODO: Maybe switch Kubo for Helia for better API interoperability:
+# https://github.com/ipfs/helia-http-gateway
 services:
   ipfs-host-main:
     build: ./ipfs
@@ -23,7 +25,10 @@ services:
     environment:
       IPFS_SWARM_KEY_FILE: /run/secrets/swarm-key
   app:
-    build: ./js-etherium
+    build: 
+      context: ./js-etherium
+      dockerfile: ./js-etherium/Dockerfile
+    image: js-etherium-node
     hostname: app
   # alpine:
   #   image: alpine:3.21.2
