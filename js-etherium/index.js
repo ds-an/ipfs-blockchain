@@ -1,11 +1,21 @@
 // TODO: Add https://github.com/ipfs/js-kubo-rpc-client or
 // https://github.com/ipfs/helia instead of web3.storage
 
+// type:module
+
 // Load express module with `require` directive
-const express = require('express');
-const fileUpload = require('express-fileupload');
-const { Web3Storage, getFilesFromPath  } = require('web3.storage');
-const app = express();
+
+import { create } from 'kubo-rpc-client';
+import pkg from 'express';
+const { express } = pkg;
+import pkg2 from "express-fileupload";
+const { fileUpload } = pkg2;
+
+// const express = require('express');
+// const fileUpload = require('express-fileupload');
+// const { getFilesFromPath } = require('kubo-rpc-client');
+// const { create } = require('kubo-rpc-client');
+const app = express.express();
 app.use(express.static(__dirname));
 app.use(
   fileUpload({
@@ -14,6 +24,7 @@ app.use(
 );
 app.use(express.json());
 const path = require("path");
+const ipfs = create({ url: 'http://localhost:5001/api/v0' });
 
 require('dotenv').config();
 
@@ -44,47 +55,47 @@ app.post("/uploadData", async (req, res) => {
     }
 
     async function uploaddatatoIPFS() {
-        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDU5Y2VmRmY4RDg2MkEzQUY3OTIzMzhkNjNmOEEwZjQ0MzAwMTQwN2YiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2ODA1ODk2NzY3NzYsIm5hbWUiOiJ0ZXN0aW5nIn0.R6m_nS4P-f9c59TT5a-6yhwvIKPGBIC1ODVwl47ZLaU";
-        const storage = new Web3Storage({token: token});
+        // const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDU5Y2VmRmY4RDg2MkEzQUY3OTIzMzhkNjNmOEEwZjQ0MzAwMTQwN2YiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2ODA1ODk2NzY3NzYsIm5hbWUiOiJ0ZXN0aW5nIn0.R6m_nS4P-f9c59TT5a-6yhwvIKPGBIC1ODVwl47ZLaU";
+        // const storage = new Web3Storage({token: token});
         const files = await getFilesFromPath(__dirname + `/${filename}`);
         console.log("Uploading files to IPFS, Please wait !!!");
-        const cid = await storage.put(files);
+        const cid = await ipfs.add(files);
         console.log(`IPFS CID: ${cid}`);
         return(cid)
     }
 
-    async function storeDataInBlockchain(hash) {
-        const API_URL = process.env.API_URL;
-        const PRIVATE_KEY = process.env.PRIVATE_KEY;
-        const CONTRACT_ADDRESS_1 = process.env.CONTRACT_ADDRESS;
-        // Contract ABI
-        const { abi } = require("./artifacts/contracts/IPFShashStorage.sol/IPFShashStorage.json");
-        const provider = new ethers.providers.JsonRpcProvider(API_URL);
-        // It calculates the blockchain address from private key
-        const signer = new ethers.Wallet(PRIVATE_KEY, provider);
-        //console.log(signer)
-        const StorageContract = new ethers.Contract(CONTRACT_ADDRESS_1, abi, signer);
-
-        let _hash = hash.toString();
-
-        const isStored = await StorageContract.isFileStored(name);
-
-        if (isStored == false) {
-            console.log("Storing the IPFS hash...");
-            const tx = await StorageContract.upload(name, _hash);
-            await tx.wait();
-            const storedhash = await StorageContract.getIPFSHash(name)
-            res.send(`IPFS hash is stored in the smart contract: ${storedhash}`);
-        }
-
-        else {
-            console.log("Data is already stored for this file name");
-            const IPFShash = await StorageContract.getIPFSHash(name);
-            res.send(`The stored hash is: ${IPFShash}`);
-        }
-
-
-    }
+    // async function storeDataInBlockchain(hash) {
+    //     const API_URL = process.env.API_URL;
+    //     const PRIVATE_KEY = process.env.PRIVATE_KEY;
+    //     const CONTRACT_ADDRESS_1 = process.env.CONTRACT_ADDRESS;
+    //     // Contract ABI
+    //     const { abi } = require("./artifacts/contracts/IPFShashStorage.sol/IPFShashStorage.json");
+    //     const provider = new ethers.providers.JsonRpcProvider(API_URL);
+    //     // It calculates the blockchain address from private key
+    //     const signer = new ethers.Wallet(PRIVATE_KEY, provider);
+    //     //console.log(signer)
+    //     const StorageContract = new ethers.Contract(CONTRACT_ADDRESS_1, abi, signer);
+    //
+    //     let _hash = hash.toString();
+    //
+    //     const isStored = await StorageContract.isFileStored(name);
+    //
+    //     if (isStored == false) {
+    //         console.log("Storing the IPFS hash...");
+    //         const tx = await StorageContract.upload(name, _hash);
+    //         await tx.wait();
+    //         const storedhash = await StorageContract.getIPFSHash(name)
+    //         res.send(`IPFS hash is stored in the smart contract: ${storedhash}`);
+    //     }
+    //
+    //     else {
+    //         console.log("Data is already stored for this file name");
+    //         const IPFShash = await StorageContract.getIPFSHash(name);
+    //         res.send(`The stored hash is: ${IPFShash}`);
+    //     }
+    //
+    //
+    // }
 
    
 
@@ -94,7 +105,7 @@ app.post("/uploadData", async (req, res) => {
 
     let hash = await uploaddatatoIPFS();
 
-    await storeDataInBlockchain(hash);
+    // await storeDataInBlockchain(hash);
 })
 
 app.listen(port, function () {

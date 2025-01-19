@@ -8,8 +8,8 @@ services:
       - swarm-key
     environment:
       IPFS_SWARM_KEY_FILE: /run/secrets/swarm-key
-    # ports:
-    #   - 5001:5001
+    ports:
+      - 5001:5001
   ipfs-host-2:
     build: ./ipfs
     hostname: ipfs-host-2
@@ -28,7 +28,7 @@ services:
     build: 
       context: ./js-etherium
       dockerfile: ./js-etherium/Dockerfile
-    image: js-etherium-node
+    # image: js-etherium-node
     hostname: app
   # alpine:
   #   image: alpine:3.21.2
