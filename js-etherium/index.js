@@ -5,31 +5,27 @@
 
 // Load express module with `require` directive
 
-import { create } from 'kubo-rpc-client';
-import pkg from 'express';
-const { express } = pkg;
-import pkg2 from "express-fileupload";
-const { fileUpload } = pkg2;
-
-// const express = require('express');
-// const fileUpload = require('express-fileupload');
-// const { getFilesFromPath } = require('kubo-rpc-client');
-// const { create } = require('kubo-rpc-client');
-const app = express.express();
+const express = require('express');
+const fileUpload = require('express-fileupload');
+// const { Web3Storage, getFilesFromPath  } = require('web3.storage');
+const app = express();
 app.use(express.static(__dirname));
 app.use(
   fileUpload({
     extended: true,
   })
 );
+
 app.use(express.json());
-const path = require("path");
-const ipfs = create({ url: 'http://localhost:5001/api/v0' });
 
 require('dotenv').config();
 
-const ethers = require('ethers')
+// const ethers = require('ethers')
 var port = 3000;
+
+const path = require("path");
+
+const ipfs = create({ url: 'http://localhost:5001/api/v0' });
 
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "index.html"))
