@@ -5,9 +5,24 @@
 
 // Load express module with `require` directive
 
-const express = require('express');
-const fileUpload = require('express-fileupload');
+import express from 'express'
+import fileUpload from 'express-fileupload'
+import path from 'path'
+import { createHeliaHTTP } from '@helia/http'
+import { unixfs } from '@helia/unixfs'
+import { fileURLToPath } from 'url'
+import { dirname } from 'path'
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+
+console.log(__filename);
+console.log(__dirname);
 // const { Web3Storage, getFilesFromPath  } = require('web3.storage');
+//
+const helia = await createHeliaHTTP()
+
+const fs = unixfs(helia)
+
 const app = express();
 app.use(express.static(__dirname));
 app.use(
@@ -18,14 +33,13 @@ app.use(
 
 app.use(express.json());
 
-require('dotenv').config();
+// require('dotenv').config();
 
 // const ethers = require('ethers')
 var port = 3000;
 
-const path = require("path");
 
-const ipfs = create({ url: 'http://localhost:5001/api/v0' });
+// const ipfs = create({ url: 'http://localhost:5001/api/v0' });
 
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "index.html"))
@@ -46,7 +60,7 @@ app.post("/uploadData", async (req, res) => {
             if (err) {
                 return res.status(500).send(err);
             }
-            console.log("File added to the server successfully !!!")
+            console.log("File added to the server successfully!!!")
         })
     }
 
@@ -54,7 +68,7 @@ app.post("/uploadData", async (req, res) => {
         // const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDU5Y2VmRmY4RDg2MkEzQUY3OTIzMzhkNjNmOEEwZjQ0MzAwMTQwN2YiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2ODA1ODk2NzY3NzYsIm5hbWUiOiJ0ZXN0aW5nIn0.R6m_nS4P-f9c59TT5a-6yhwvIKPGBIC1ODVwl47ZLaU";
         // const storage = new Web3Storage({token: token});
         const files = await getFilesFromPath(__dirname + `/${filename}`);
-        console.log("Uploading files to IPFS, Please wait !!!");
+        console.log("Uploading files to IPFS, Please wait!!!");
         const cid = await ipfs.add(files);
         console.log(`IPFS CID: ${cid}`);
         return(cid)
