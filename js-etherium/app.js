@@ -1,5 +1,5 @@
-// TODO: Add https://github.com/ipfs/js-kubo-rpc-client or
-// https://github.com/ipfs/helia instead of web3.storage
+// TODO: Use this https://github.com/ipfs-examples/helia-101
+// Maybe use axios or fetch for API calling?
 
 // type:module
 
@@ -8,10 +8,12 @@
 import express from 'express'
 import fileUpload from 'express-fileupload'
 import path from 'path'
-import { createHeliaHTTP } from '@helia/http'
-import { unixfs } from '@helia/unixfs'
+// import { createHeliaHTTP } from '@helia/http'
+// import { unixfs } from '@helia/unixfs'
+import { create, globSource } from 'kubo-rpc-client'
 import { fileURLToPath } from 'url'
 import { dirname } from 'path'
+import { config } from 'dotenv'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
@@ -19,9 +21,9 @@ console.log(__filename);
 console.log(__dirname);
 // const { Web3Storage, getFilesFromPath  } = require('web3.storage');
 //
-const helia = await createHeliaHTTP()
-
-const fs = unixfs(helia)
+// const helia = await createHeliaHTTP()
+//
+// const fs = unixfs(helia)
 
 const app = express();
 app.use(express.static(__dirname));
@@ -38,6 +40,11 @@ app.use(express.json());
 // const ethers = require('ethers')
 var port = 3000;
 
+const ipfs = create('/ip4/127.0.0.1/tcp/5001')
+
+const { cid } = await ipfs.add('Hello world!')
+
+console.log(cid)
 
 // const ipfs = create({ url: 'http://localhost:5001/api/v0' });
 
@@ -67,7 +74,8 @@ app.post("/uploadData", async (req, res) => {
     async function uploaddatatoIPFS() {
         // const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDU5Y2VmRmY4RDg2MkEzQUY3OTIzMzhkNjNmOEEwZjQ0MzAwMTQwN2YiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2ODA1ODk2NzY3NzYsIm5hbWUiOiJ0ZXN0aW5nIn0.R6m_nS4P-f9c59TT5a-6yhwvIKPGBIC1ODVwl47ZLaU";
         // const storage = new Web3Storage({token: token});
-        const files = await getFilesFromPath(__dirname + `/${filename}`);
+        // const files = await getFilesFromPath(__dirname + `/${filename}`);
+        const files = await globSource('./images', '/${filename}')
         console.log("Uploading files to IPFS, Please wait!!!");
         const cid = await ipfs.add(files);
         console.log(`IPFS CID: ${cid}`);
@@ -109,7 +117,7 @@ app.post("/uploadData", async (req, res) => {
 
    
 
-    await moveFiletoServer();
+    // await moveFiletoServer();
 
     await new Promise(resolve => setTimeout(resolve, 3000));
 

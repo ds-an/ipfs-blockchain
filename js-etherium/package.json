@@ -14,16 +14,6 @@
     "fs-extra": "^11.1.0",
     "node-fetch": "^3.3.0",
     "path": "^0.12.7",
-    "@chainsafe/libp2p-noise": "^16.0.0",
-    "@chainsafe/libp2p-yamux": "^7.0.1",
-    "@helia/http": "^2.0.0",
-    "@helia/unixfs": "^4.0.0",
-    "@libp2p/bootstrap": "^11.0.7",
-    "@libp2p/identify": "^3.0.7",
-    "@libp2p/tcp": "^10.0.8",
-    "blockstore-core": "^5.0.2",
-    "datastore-core": "^10.0.2",
-    "helia": "^5.0.2",
-    "libp2p": "^2.1.6"
+    "kubo-rpc-client": "^5.0.2"
   }
 }
